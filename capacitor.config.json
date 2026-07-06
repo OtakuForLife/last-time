@@ -1,0 +1,8 @@
+{
+  "appId": "com.lasttime.app",
+  "appName": "Last Time",
+  "webDir": "dist",
+  "server": {
+    "androidScheme": "https"
+  }
+}
