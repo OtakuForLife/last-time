@@ -176,9 +176,36 @@ select {
   font-size: 0.9rem;
 }
 
+.icon-btn--danger,
+.icon-btn--dismiss {
+  width: 2.75rem;
+  height: 2.75rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.icon-btn--danger svg,
+.icon-btn--dismiss svg {
+  width: 1.65rem;
+  height: 1.65rem;
+}
+
 .icon-btn--danger:hover {
   background: var(--danger-soft);
   color: var(--danger);
+}
+
+.icon-btn--favorite:not(.icon-btn--favorite-active) {
+  opacity: 0.4;
+}
+
+.icon-btn--favorite-active {
+  color: #f5c518;
+  opacity: 1;
+}
+
+.icon-btn--favorite-active:hover {
+  color: #ffd54f;
 }
 
 /* Search */
@@ -252,14 +279,14 @@ select {
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.55rem;
+  gap: 0.45rem;
 }
 
 .task {
   display: flex;
   align-items: center;
-  gap: 0.85rem;
-  padding: 0.9rem 0.85rem;
+  gap: 0.6rem;
+  padding: 0.6rem 0.65rem;
   background: var(--bg-elevated);
   border: 1px solid var(--border);
   border-radius: var(--radius);
@@ -280,7 +307,7 @@ select {
 }
 
 .task__emoji {
-  font-size: 1.6rem;
+  font-size: 1.35rem;
   line-height: 1;
   flex-shrink: 0;
 }
@@ -298,36 +325,51 @@ select {
 
 .task__name {
   font-family: var(--font-display);
-  font-size: 1.05rem;
+  font-size: 0.95rem;
   font-weight: 500;
-}
-
-.task__star {
-  font-size: 0.75rem;
 }
 
 .task__time {
   display: block;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   color: var(--text-muted);
-  margin-top: 0.1rem;
+  margin-top: 0.05rem;
 }
 
 .task__category {
   display: inline-block;
-  font-size: 0.7rem;
+  font-size: 0.65rem;
   text-transform: uppercase;
   letter-spacing: 0.04em;
   color: var(--text-muted);
-  margin-top: 0.2rem;
+  margin-top: 0.1rem;
   opacity: 0.7;
 }
 
 .task__actions {
   display: flex;
-  gap: 0.15rem;
+  gap: 0.25rem;
   opacity: 0;
   transition: opacity 0.15s ease;
+  flex-shrink: 0;
+}
+
+.task__actions .icon-btn {
+  width: 3rem;
+  height: 3rem;
+  font-size: 1.35rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.task__actions .icon-btn svg {
+  width: 1.35rem;
+  height: 1.35rem;
+}
+
+.task__actions .icon-btn--danger svg {
+  width: 1.6rem;
+  height: 1.6rem;
 }
 
 .task:hover .task__actions,
@@ -445,6 +487,19 @@ select {
   align-items: center;
   gap: 0.5rem;
   font-size: 0.95rem;
+}
+
+.form__hint {
+  margin: 0 0 0.5rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+.unit-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
 }
 
 .form__actions {

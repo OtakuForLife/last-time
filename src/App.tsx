@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useAppData, useFilteredTasks } from './hooks/useAppData'
 import { Header } from './components/Header'
 import { SearchBar } from './components/SearchBar'
@@ -6,7 +6,6 @@ import { FilterBar } from './components/FilterBar'
 import { TaskList } from './components/TaskList'
 import { TaskForm } from './components/TaskForm'
 import { SettingsPanel } from './components/SettingsPanel'
-import { useState } from 'react'
 import type { Task } from './types'
 
 export default function App() {

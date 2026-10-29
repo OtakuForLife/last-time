@@ -1,5 +1,6 @@
 import { useRef } from 'react'
 import { exportData, importData } from '../lib/storage'
+import { CloseIcon } from './CloseIcon'
 import type { AppData, Category } from '../types'
 
 type SettingsPanelProps = {
@@ -56,8 +57,8 @@ export function SettingsPanel({
       <div className="sheet sheet--wide">
         <div className="sheet__header">
           <h2 id="settings-title">Settings</h2>
-          <button type="button" className="icon-btn" onClick={onClose} aria-label="Close">
-            ×
+          <button type="button" className="icon-btn icon-btn--dismiss" onClick={onClose} aria-label="Close">
+            <CloseIcon />
           </button>
         </div>
 
@@ -82,7 +83,7 @@ export function SettingsPanel({
                 <span>{cat.name}</span>
                 <button
                   type="button"
-                  className="icon-btn icon-btn--sm icon-btn--danger"
+                  className="icon-btn icon-btn--danger"
                   onClick={() => {
                     if (categories.length <= 1) {
                       alert('You need at least one category.')
@@ -92,7 +93,7 @@ export function SettingsPanel({
                   }}
                   aria-label={`Delete ${cat.name}`}
                 >
-                  ×
+                  <CloseIcon />
                 </button>
               </li>
             ))}

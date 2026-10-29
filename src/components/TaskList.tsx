@@ -1,5 +1,7 @@
 import { tapFeedback } from '../lib/haptics'
-import { formatRelativeTime } from '../lib/relativeTime'
+import { formatTaskElapsed } from '../lib/relativeTime'
+import { useNow } from '../hooks/useNow'
+import { CloseIcon } from './CloseIcon'
 import type { Category, Task } from '../types'
 
 type TaskListProps = {
@@ -21,6 +23,7 @@ export function TaskList({
   onToggleFavorite,
   onDelete,
 }: TaskListProps) {
+  const now = useNow(tasks)
   const categoryMap = Object.fromEntries(categories.map((c) => [c.id, c.name]))
 
   return (
@@ -49,14 +52,9 @@ export function TaskList({
             <div className="task__body">
               <div className="task__row">
                 <span className="task__name">{task.name}</span>
-                {task.isFavorite && (
-                  <span className="task__star" aria-label="Favorite">
-                    ⭐
-                  </span>
-                )}
               </div>
               <span className="task__time">
-                Last {formatRelativeTime(task.lastDoneAt)}
+                {formatTaskElapsed(task.lastDoneAt, task.timeUnits, now)}
               </span>
               {categoryMap[task.categoryId] && (
                 <span className="task__category">{categoryMap[task.categoryId]}</span>
@@ -65,29 +63,32 @@ export function TaskList({
             <div className="task__actions" onClick={(e) => e.stopPropagation()}>
               <button
                 type="button"
-                className="icon-btn icon-btn--sm"
+                className={`icon-btn icon-btn--favorite ${task.isFavorite ? 'icon-btn--favorite-active' : ''}`}
                 onClick={() => onToggleFavorite(task.id)}
                 aria-label={task.isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+                aria-pressed={task.isFavorite}
               >
-                {task.isFavorite ? '★' : '☆'}
+                ★
               </button>
               <button
                 type="button"
-                className="icon-btn icon-btn--sm"
+                className="icon-btn"
                 onClick={() => onEdit(task)}
                 aria-label="Edit task"
               >
-                ✎
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                  <path d="M12 20h9M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
               </button>
               <button
                 type="button"
-                className="icon-btn icon-btn--sm icon-btn--danger"
+                className="icon-btn icon-btn--danger"
                 onClick={() => {
                   if (confirm(`Delete "${task.name}"?`)) onDelete(task.id)
                 }}
                 aria-label="Delete task"
               >
-                ×
+                <CloseIcon />
               </button>
             </div>
           </div>

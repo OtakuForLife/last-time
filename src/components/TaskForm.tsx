@@ -1,7 +1,23 @@
 import { useState, type FormEvent } from 'react'
-import type { Category, Task, TaskFormData } from '../types'
+import { CloseIcon } from './CloseIcon'
+import {
+  DEFAULT_TIME_UNITS,
+  TIME_DISPLAY_UNITS,
+  type Category,
+  type Task,
+  type TaskFormData,
+  type TimeDisplayUnit,
+} from '../types'
 
 const EMOJI_SUGGESTIONS = ['🌱', '🛏', '🚗', '🐶', '🔥', '🧹', '💧', '🍳', '🌿', '🧺', '🔧', '📦']
+
+const UNIT_LABELS: Record<TimeDisplayUnit, string> = {
+  years: 'Years',
+  months: 'Months',
+  days: 'Days',
+  minutes: 'Minutes',
+  seconds: 'Seconds',
+}
 
 type TaskFormProps = {
   task: Task | null
@@ -24,13 +40,28 @@ export function TaskForm({
   const [emoji, setEmoji] = useState(task?.emoji ?? '🌱')
   const [categoryId, setCategoryId] = useState(task?.categoryId ?? categories[0]?.id ?? '')
   const [isFavorite, setIsFavorite] = useState(task?.isFavorite ?? false)
+  const [timeUnits, setTimeUnits] = useState<TimeDisplayUnit[]>(
+    task?.timeUnits ?? [...DEFAULT_TIME_UNITS],
+  )
   const [newCategory, setNewCategory] = useState('')
   const [showNewCategory, setShowNewCategory] = useState(false)
+
+  const toggleTimeUnit = (unit: TimeDisplayUnit) => {
+    setTimeUnits((prev) => {
+      if (prev.includes(unit)) {
+        if (prev.length === 1) return prev
+        return prev.filter((u) => u !== unit)
+      }
+      return [...prev, unit].sort(
+        (a, b) => TIME_DISPLAY_UNITS.indexOf(a) - TIME_DISPLAY_UNITS.indexOf(b),
+      )
+    })
+  }
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
     if (!name.trim()) return
-    onSave({ name, emoji, categoryId, isFavorite })
+    onSave({ name, emoji, categoryId, isFavorite, timeUnits })
   }
 
   const handleAddCategory = () => {
@@ -46,8 +77,8 @@ export function TaskForm({
       <div className="sheet">
         <div className="sheet__header">
           <h2 id="task-form-title">{task ? 'Edit Task' : 'New Task'}</h2>
-          <button type="button" className="icon-btn" onClick={onClose} aria-label="Close">
-            ×
+          <button type="button" className="icon-btn icon-btn--dismiss" onClick={onClose} aria-label="Close">
+            <CloseIcon />
           </button>
         </div>
 
@@ -128,6 +159,24 @@ export function TaskForm({
             />
             Favorite
           </label>
+
+          <fieldset className="form__fieldset">
+            <legend className="form__label">Time display</legend>
+            <p className="form__hint">Choose one or more units shown for this task.</p>
+            <div className="unit-picker">
+              {TIME_DISPLAY_UNITS.map((unit) => (
+                <button
+                  key={unit}
+                  type="button"
+                  className={`chip ${timeUnits.includes(unit) ? 'chip--active' : ''}`}
+                  onClick={() => toggleTimeUnit(unit)}
+                  aria-pressed={timeUnits.includes(unit)}
+                >
+                  {UNIT_LABELS[unit]}
+                </button>
+              ))}
+            </div>
+          </fieldset>
 
           <div className="form__actions">
             {onDelete && (

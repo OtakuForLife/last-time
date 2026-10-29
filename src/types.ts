@@ -3,6 +3,18 @@ export interface Category {
   name: string
 }
 
+export type TimeDisplayUnit = 'years' | 'months' | 'days' | 'minutes' | 'seconds'
+
+export const TIME_DISPLAY_UNITS: TimeDisplayUnit[] = [
+  'years',
+  'months',
+  'days',
+  'minutes',
+  'seconds',
+]
+
+export const DEFAULT_TIME_UNITS: TimeDisplayUnit[] = ['days']
+
 export interface Task {
   id: string
   name: string
@@ -10,6 +22,7 @@ export interface Task {
   categoryId: string
   lastDoneAt: number | null
   isFavorite: boolean
+  timeUnits: TimeDisplayUnit[]
   createdAt: number
 }
 
@@ -28,4 +41,5 @@ export type TaskFormData = {
   emoji: string
   categoryId: string
   isFavorite: boolean
+  timeUnits: TimeDisplayUnit[]
 }

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { createId } from '../lib/id'
 import { loadData, saveData } from '../lib/storage'
+import { DEFAULT_TIME_UNITS } from '../types'
 import type { AppData, Category, Task, TaskFormData } from '../types'
 
 export function useAppData() {
@@ -44,6 +45,7 @@ export function useAppData() {
         categoryId: form.categoryId,
         lastDoneAt: Date.now(),
         isFavorite: form.isFavorite,
+        timeUnits: form.timeUnits.length > 0 ? form.timeUnits : [...DEFAULT_TIME_UNITS],
         createdAt: Date.now(),
       }
       update((prev) => ({ ...prev, tasks: [task, ...prev.tasks] }))
@@ -63,6 +65,7 @@ export function useAppData() {
                 emoji: form.emoji || '✓',
                 categoryId: form.categoryId,
                 isFavorite: form.isFavorite,
+                timeUnits: form.timeUnits.length > 0 ? form.timeUnits : [...DEFAULT_TIME_UNITS],
               }
             : t,
         ),

@@ -1,4 +1,5 @@
 import { Preferences } from '@capacitor/preferences'
+import { normalizeTimeUnits } from './relativeTime'
 import type { AppData, Category, Task } from '../types'
 
 const STORAGE_KEY = 'last-time-data'
@@ -10,6 +11,13 @@ const DEFAULT_CATEGORIES: Category[] = [
   { id: 'pets', name: 'Pets' },
 ]
 
+function normalizeTask(task: Task): Task {
+  return {
+    ...task,
+    timeUnits: normalizeTimeUnits(task.timeUnits),
+  }
+}
+
 const DEFAULT_TASKS: Task[] = [
   {
     id: 'demo-water-plants',
@@ -18,6 +26,7 @@ const DEFAULT_TASKS: Task[] = [
     categoryId: 'home',
     lastDoneAt: Date.now() - 8 * 86_400_000,
     isFavorite: true,
+    timeUnits: ['days'],
     createdAt: Date.now(),
   },
   {
@@ -27,6 +36,7 @@ const DEFAULT_TASKS: Task[] = [
     categoryId: 'home',
     lastDoneAt: Date.now() - 12 * 86_400_000,
     isFavorite: false,
+    timeUnits: ['days'],
     createdAt: Date.now(),
   },
   {
@@ -36,6 +46,7 @@ const DEFAULT_TASKS: Task[] = [
     categoryId: 'car',
     lastDoneAt: Date.now() - 37 * 86_400_000,
     isFavorite: false,
+    timeUnits: ['days'],
     createdAt: Date.now(),
   },
   {
@@ -45,6 +56,7 @@ const DEFAULT_TASKS: Task[] = [
     categoryId: 'pets',
     lastDoneAt: Date.now() - 91 * 86_400_000,
     isFavorite: true,
+    timeUnits: ['months', 'days'],
     createdAt: Date.now(),
   },
   {
@@ -54,6 +66,7 @@ const DEFAULT_TASKS: Task[] = [
     categoryId: 'home',
     lastDoneAt: Date.now() - 204 * 86_400_000,
     isFavorite: false,
+    timeUnits: ['years', 'months', 'days'],
     createdAt: Date.now(),
   },
 ]
@@ -82,7 +95,7 @@ export async function loadData(): Promise<AppData> {
   try {
     const parsed = JSON.parse(raw) as AppData
     return {
-      tasks: parsed.tasks ?? [],
+      tasks: (parsed.tasks ?? []).map(normalizeTask),
       categories: parsed.categories?.length ? parsed.categories : DEFAULT_CATEGORIES,
       settings: { darkMode: parsed.settings?.darkMode ?? false },
     }
@@ -105,7 +118,7 @@ export function importData(json: string): AppData {
     throw new Error('Invalid backup: missing tasks')
   }
   return {
-    tasks: parsed.tasks,
+    tasks: parsed.tasks.map((t) => normalizeTask(t as Task)),
     categories: parsed.categories?.length ? parsed.categories : DEFAULT_CATEGORIES,
     settings: { darkMode: parsed.settings?.darkMode ?? false },
   }
